@@ -54,9 +54,9 @@ namespace UsageTracker.Entities
         private void UpdateProgressBar()
         {
             Debug.WriteLine("Process: " + ProcessName);
-            Debug.WriteLine(TrackingPage.TimeDifference);
-            Debug.WriteLine("Total percentage of usage:" + Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds / TrackingPage.TimeDifference.TotalMilliseconds * 100));
-            SetProgressBarValue(Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds / TrackingPage.TimeDifference.TotalMilliseconds * 100));
+            Debug.WriteLine(TrackingView.TimeDifference);
+            Debug.WriteLine("Total percentage of usage:" + Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds / TrackingView.TimeDifference.TotalMilliseconds * 100));
+            SetProgressBarValue(Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds / TrackingView.TimeDifference.TotalMilliseconds * 100));
         }
 
         // set to private afterwards

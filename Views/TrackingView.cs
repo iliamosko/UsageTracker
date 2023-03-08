@@ -11,10 +11,11 @@ using System.Runtime.InteropServices;
 using UsageTracker.Background;
 using Timer = System.Windows.Forms.Timer;
 using UsageTracker.Entities;
+using TimeTracker.Entities;
 
 namespace UsageTracker
 {
-    public partial class TrackingPage : Form
+    public partial class TrackingView : Form
     {
         public static TimeSpan TimeDifference;
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -22,6 +23,7 @@ namespace UsageTracker
         readonly DateTime start;
         readonly ActiveProcessListener activeWindowTracker;
         static int testNum = 1;
+        User activeUser;
 
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
@@ -39,8 +41,9 @@ namespace UsageTracker
         int nHeightEllipse
         );
 
-        public TrackingPage()
+        public TrackingView(User user)
         {
+            activeUser = user;
             InitializeComponent();
             start = DateTime.UtcNow;
             IntialSetup();
@@ -85,7 +88,18 @@ namespace UsageTracker
             // Everytime an update happens, update the active process/window
             activeWindowTracker.TrackProcess();
             activeWindowTracker.processManager.PlaceInOrder(ProcessNamePanel, ProgressBarPanel, TimeSpentPanel);
+        }
 
+        public void SetActiveUser(User user)
+        {
+            if (activeUser == null)
+            {
+                activeUser = user;
+            } 
+            else
+            {
+                throw new Exception("Cant have multiple users active");
+            }
         }
 
         private void template_Load(object sender, EventArgs e)

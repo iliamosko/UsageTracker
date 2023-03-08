@@ -1,4 +1,4 @@
-using TimeTracker;
+using UsageTracker.Pages;
 
 namespace UsageTracker
 {
@@ -13,7 +13,7 @@ namespace UsageTracker
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new TrackingPage());
+            Application.Run(new LogInView());
         }
     }
 }
