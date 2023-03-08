@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UsageTracker.Interfaces;
 
 namespace TimeTracker.Entities
 {
-    internal class User
+    public class User : IUser
     {
         int id;
         string firstName;
@@ -24,6 +25,29 @@ namespace TimeTracker.Entities
             this.password = password;
         }
 
+        public int GetId()
+        {
+            throw new NotImplementedException();
+        }
 
+        public string GetName()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetLastName()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetEmail()
+        {
+            return email;
+        }
+
+        public string GetPassword()
+        {
+           return password;
+        }
     }
 }
