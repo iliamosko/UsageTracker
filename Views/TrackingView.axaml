@@ -1,0 +1,207 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:UsageTracker.ViewModels"
+        x:Class="UsageTracker.Views.TrackingView"
+        x:DataType="vm:TrackingViewModel"
+        Title="Usage Tracker"
+        Width="800" Height="450"
+        Background="#2E3349"
+        SystemDecorations="None"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Styles>
+
+        <Style Selector="TextBlock.columnHeader">
+            <Setter Property="Foreground" Value="#6B7280"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style Selector="TextBlock.processName">
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style Selector="TextBlock.timeLabel">
+            <Setter Property="Foreground" Value="#9CA3AF"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="Consolas,Menlo,monospace"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <!-- Window control buttons -->
+        <Style Selector="Button.icon">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#6B7280"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="Button.icon:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#25FFFFFF"/>
+        </Style>
+
+        <!-- Strip TreeView chrome -->
+        <Style Selector="TreeView">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style Selector="TreeViewItem">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <!-- Remove selection background -->
+        <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="TreeViewItem:selected:focus /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="TreeViewItem:pointerover /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="#0DFFFFFF"/>
+        </Style>
+        <!-- Tint the expand/collapse toggle arrow -->
+        <Style Selector="TreeViewItem /template/ ToggleButton#PART_ExpandCollapseChevron">
+            <Setter Property="Foreground" Value="#6B7280"/>
+        </Style>
+
+    </Window.Styles>
+
+    <DockPanel>
+
+        <!-- Left navigation panel -->
+        <Border DockPanel.Dock="Left" Width="155" Background="#181B2A">
+            <DockPanel>
+                <Border DockPanel.Dock="Top" Height="60" Padding="16,0">
+                    <TextBlock Text="Usage Tracker"
+                               Foreground="White"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+                </Border>
+                <Button DockPanel.Dock="Bottom"
+                        Content="Exit"
+                        Command="{Binding CloseCommand}"
+                        Background="Transparent"
+                        Foreground="#6B7280"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="16,10"
+                        BorderThickness="0"/>
+                <StackPanel/>
+            </DockPanel>
+        </Border>
+
+        <!-- Top title bar -->
+        <Border DockPanel.Dock="Top" Height="32" Background="#1C1F2E">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <Border Grid.Column="0"
+                        Background="Transparent"
+                        PointerPressed="OnTitleBarPointerPressed"/>
+                <Button Grid.Column="1" Content="—" Command="{Binding MinimizeCommand}" Classes="icon"/>
+                <Button Grid.Column="2" Content="✕" Command="{Binding CloseCommand}" Classes="icon"/>
+            </Grid>
+        </Border>
+
+        <!-- Main content -->
+        <Grid Margin="20,12,20,12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="14"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="1"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Active process card -->
+            <Border Grid.Row="0"
+                    Background="#1C1F2E"
+                    CornerRadius="8"
+                    Padding="14,10"
+                    IsVisible="{Binding ActiveProcess, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                    <Ellipse Grid.Column="0"
+                             Width="7" Height="7"
+                             Fill="#22C55E"
+                             VerticalAlignment="Center"
+                             Margin="0,0,10,0"/>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding ActiveProcess.FullTitle}"
+                               Foreground="White"
+                               FontSize="13"
+                               FontWeight="Medium"
+                               VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Grid.Column="2"
+                               Text="Session "
+                               Foreground="#6B7280"
+                               FontSize="11"
+                               VerticalAlignment="Center"
+                               Margin="12,0,0,0"/>
+                    <TextBlock Grid.Column="3"
+                               Text="{Binding SessionTime}"
+                               Foreground="#9CA3AF"
+                               FontFamily="Consolas,Menlo,monospace"
+                               FontSize="12"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- Column headers -->
+            <Grid Grid.Row="2" ColumnDefinitions="*,90">
+                <TextBlock Grid.Column="0"
+                           Text="Application"
+                           Classes="columnHeader"/>
+                <TextBlock Grid.Column="1"
+                           Text="Elapsed"
+                           Classes="columnHeader"
+                           HorizontalAlignment="Right"/>
+            </Grid>
+
+            <!-- Separator -->
+            <Rectangle Grid.Row="3" Fill="#2D3148"/>
+
+            <!-- Process tree -->
+            <ScrollViewer Grid.Row="4" Margin="0,4,0,0">
+                <TreeView ItemsSource="{Binding Groups}">
+                    <TreeView.DataTemplates>
+                        <TreeDataTemplate x:DataType="vm:ProcessGroupViewModel"
+                                          ItemsSource="{Binding Children}">
+                            <Grid Height="28" ColumnDefinitions="*,90">
+                                <!-- Name + progress bar -->
+                                <Grid Grid.Column="0" ColumnDefinitions="Auto,*" Margin="0,0,8,0">
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding Name}"
+                                               Classes="processName"
+                                               MaxWidth="160"/>
+                                    <ProgressBar Grid.Column="1"
+                                                 Value="{Binding ProgressPercent}"
+                                                 Minimum="0" Maximum="100"
+                                                 Height="5"
+                                                 VerticalAlignment="Center"
+                                                 Margin="10,0,0,0"/>
+                                </Grid>
+                                <!-- Elapsed time -->
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding ElapsedText}"
+                                           Classes="timeLabel"/>
+                            </Grid>
+                        </TreeDataTemplate>
+                    </TreeView.DataTemplates>
+                </TreeView>
+            </ScrollViewer>
+
+        </Grid>
+    </DockPanel>
+
+</Window>

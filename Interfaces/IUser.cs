@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace UsageTracker.Interfaces;
 
-namespace UsageTracker.Interfaces
+public interface IUser
 {
-    internal interface IUser
-    {
-        public int GetId();
-
-        public string GetName();
-
-        public string GetLastName();
-
-        public string GetEmail();
-
-        public string GetPassword();
-    }
+    int GetId();
+    string GetName();
+    string GetLastName();
+    string GetEmail();
+    /// <summary>Returns the stored password hash (never plain text).</summary>
+    string GetPassword();
 }
