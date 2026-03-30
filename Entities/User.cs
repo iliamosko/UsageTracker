@@ -1,53 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UsageTracker.Interfaces;
 
-namespace TimeTracker.Entities
+namespace UsageTracker.Entities;
+
+public sealed class User : IUser
 {
-    public class User : IUser
+    public int Id { get; }
+    public string FirstName { get; }
+    public string LastName { get; }
+    public string Email { get; }
+    public string PasswordHash { get; }
+
+    public User(int id, string firstName, string lastName, string email, string passwordHash)
     {
-        int id;
-        string firstName;
-        string lastName;
-        string email;
-        string password;
-        string passwordHash;
-
-        public User(int id, string firstName, string lastName, string email, string password)
-        {
-            this.id = id;
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.email = email;
-            this.password = password;
-        }
-
-        public int GetId()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetName()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetLastName()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetEmail()
-        {
-            return email;
-        }
-
-        public string GetPassword()
-        {
-           return password;
-        }
+        Id = id;
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
+        PasswordHash = passwordHash;
     }
+
+    public int GetId() => Id;
+    public string GetName() => FirstName;
+    public string GetLastName() => LastName;
+    public string GetEmail() => Email;
+    public string GetPassword() => PasswordHash;
 }
