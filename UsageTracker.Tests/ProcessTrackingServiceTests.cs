@@ -1,4 +1,3 @@
-using FluentAssertions;
 using UsageTracker.Services;
 using Xunit;
 
@@ -12,7 +11,7 @@ public class ProcessTrackingServiceTests
     public void OnWindowChanged_NewProcess_AddsToList()
     {
         _sut.OnWindowChanged("Notepad");
-        _sut.TrackedProcesses.Should().ContainSingle(p => p.ProcessName == "Notepad");
+        Assert.Single(_sut.TrackedProcesses.Where(p => p.ProcessName == "Notepad"));
     }
 
     [Fact]
@@ -20,7 +19,7 @@ public class ProcessTrackingServiceTests
     {
         _sut.OnWindowChanged("Chrome");
         _sut.OnWindowChanged("Chrome");
-        _sut.TrackedProcesses.Should().ContainSingle(p => p.ProcessName == "Chrome");
+        Assert.Single(_sut.TrackedProcesses.Where(p => p.ProcessName == "Chrome"));
     }
 
     [Fact]
@@ -31,7 +30,7 @@ public class ProcessTrackingServiceTests
 
         _sut.OnWindowChanged("Chrome");
 
-        notepad.IsActive.Should().BeFalse();
+        Assert.False(notepad.IsActive);
     }
 
     [Fact]
@@ -40,16 +39,16 @@ public class ProcessTrackingServiceTests
         _sut.OnWindowChanged("Notepad");
         _sut.OnWindowChanged("Chrome");
 
-        _sut.ActiveProcess!.ProcessName.Should().Be("Chrome");
-        _sut.ActiveProcess.IsActive.Should().BeTrue();
+        Assert.Equal("Chrome", _sut.ActiveProcess!.ProcessName);
+        Assert.True(_sut.ActiveProcess.IsActive);
     }
 
     [Fact]
     public void OnWindowChanged_EmptyTitle_IsIgnored()
     {
         _sut.OnWindowChanged(string.Empty);
-        _sut.TrackedProcesses.Should().BeEmpty();
-        _sut.ActiveProcess.Should().BeNull();
+        Assert.Empty(_sut.TrackedProcesses);
+        Assert.Null(_sut.ActiveProcess);
     }
 
     [Fact]
@@ -60,7 +59,7 @@ public class ProcessTrackingServiceTests
         _sut.OnWindowChanged("App A"); // switch back: App A accumulates more time
 
         var names = _sut.TrackedProcesses.Select(p => p.ProcessName).ToList();
-        names[0].Should().Be("App A");
+        Assert.Equal("App A", names[0]);
     }
 
     [Fact]
@@ -68,7 +67,7 @@ public class ProcessTrackingServiceTests
     {
         _sut.StartSession();
         Thread.Sleep(50);
-        _sut.SessionElapsed.Should().BeGreaterThan(TimeSpan.Zero);
+        Assert.True(_sut.SessionElapsed > TimeSpan.Zero);
     }
 
     [Fact]
@@ -79,6 +78,6 @@ public class ProcessTrackingServiceTests
 
         _sut.OnWindowChanged("Notepad");
 
-        fired.Should().BeTrue();
+        Assert.True(fired);
     }
 }

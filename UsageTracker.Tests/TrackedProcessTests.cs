@@ -1,4 +1,3 @@
-using FluentAssertions;
 using UsageTracker.Entities;
 using Xunit;
 
@@ -11,7 +10,7 @@ public class TrackedProcessTests
     {
         var process = new TrackedProcess("TestApp");
         process.Start();
-        process.IsActive.Should().BeTrue();
+        Assert.True(process.IsActive);
     }
 
     [Fact]
@@ -20,15 +19,15 @@ public class TrackedProcessTests
         var process = new TrackedProcess("TestApp");
         process.Start();
         process.Stop();
-        process.IsActive.Should().BeFalse();
+        Assert.False(process.IsActive);
     }
 
     [Fact]
     public void Stop_WhenNotRunning_DoesNotThrow()
     {
         var process = new TrackedProcess("TestApp");
-        var act = () => process.Stop();
-        act.Should().NotThrow();
+        var ex = Record.Exception(() => process.Stop());
+        Assert.Null(ex);
     }
 
     [Fact]
@@ -38,7 +37,7 @@ public class TrackedProcessTests
         process.Start();
         await Task.Delay(50);
         process.Stop();
-        process.Elapsed.Should().BeGreaterThan(TimeSpan.Zero);
+        Assert.True(process.Elapsed > TimeSpan.Zero);
     }
 
     [Fact]
@@ -48,13 +47,12 @@ public class TrackedProcessTests
         process.Start();
         await Task.Delay(50);
         process.Reset();
-        process.Elapsed.Should().Be(TimeSpan.Zero);
+        Assert.Equal(TimeSpan.Zero, process.Elapsed);
     }
 
     [Fact]
     public void Constructor_NullName_Throws()
     {
-        var act = () => new TrackedProcess(null!);
-        act.Should().Throw<ArgumentNullException>();
+        Assert.Throws<ArgumentNullException>(() => new TrackedProcess(null!));
     }
 }

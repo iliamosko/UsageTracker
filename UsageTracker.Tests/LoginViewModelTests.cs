@@ -1,11 +1,10 @@
 using System.Reactive;
 using System.Reactive.Linq;
-using FluentAssertions;
-using Xunit;
 using NSubstitute;
 using UsageTracker.Entities;
 using UsageTracker.Services;
 using UsageTracker.ViewModels;
+using Xunit;
 
 namespace UsageTracker.Tests;
 
@@ -25,7 +24,7 @@ public class LoginViewModelTests
         bool canExecute = false;
         sut.LoginCommand.CanExecute.Subscribe(x => canExecute = x);
 
-        canExecute.Should().BeFalse();
+        Assert.False(canExecute);
     }
 
     [Fact]
@@ -38,7 +37,7 @@ public class LoginViewModelTests
         bool canExecute = false;
         sut.LoginCommand.CanExecute.Subscribe(x => canExecute = x);
 
-        canExecute.Should().BeFalse();
+        Assert.False(canExecute);
     }
 
     [Fact]
@@ -51,7 +50,7 @@ public class LoginViewModelTests
         bool canExecute = false;
         sut.LoginCommand.CanExecute.Subscribe(x => canExecute = x);
 
-        canExecute.Should().BeTrue();
+        Assert.True(canExecute);
     }
 
     [Fact]
@@ -69,7 +68,7 @@ public class LoginViewModelTests
 
         await sut.LoginCommand.Execute().FirstAsync();
 
-        sut.ErrorMessage.Should().Be("Invalid email or password.");
+        Assert.Equal("Invalid email or password.", sut.ErrorMessage);
     }
 
     [Fact]
@@ -88,6 +87,6 @@ public class LoginViewModelTests
         // then re-throws from the Execute() observable. Swallow it here; check ErrorMessage.
         try { await sut.LoginCommand.Execute().FirstAsync(); } catch { }
 
-        sut.ErrorMessage.Should().Contain("DB down");
+        Assert.Contains("DB down", sut.ErrorMessage);
     }
 }
