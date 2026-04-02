@@ -1,4 +1,5 @@
 using System.Reactive;
+using Avalonia.Input;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 using UsageTracker.ViewModels;
@@ -22,5 +23,11 @@ public partial class LoginView : ReactiveWindow<LoginViewModel>
                 interaction.SetOutput(Unit.Default);
             });
         });
+    }
+
+    private void OnTitleBarPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+            BeginMoveDrag(e);
     }
 }

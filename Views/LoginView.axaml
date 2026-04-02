@@ -4,49 +4,128 @@
         x:Class="UsageTracker.Views.LoginView"
         x:DataType="vm:LoginViewModel"
         Title="Usage Tracker"
-        Width="500" Height="350"
-        Background="#2E3349"
+        Width="420" Height="380"
+        Background="#0D0F18"
         SystemDecorations="None"
         WindowStartupLocation="CenterScreen">
 
-    <Grid RowDefinitions="*,Auto,Auto,Auto,Auto,*" Margin="60,40">
+    <Window.Styles>
 
-        <TextBlock Grid.Row="1"
-                   Text="Usage Tracker"
-                   Foreground="White"
-                   FontSize="22"
-                   FontWeight="SemiBold"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,24"/>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#131625"/>
+            <Setter Property="BorderBrush" Value="#1E2238"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Foreground" Value="#EEF0FA"/>
+            <Setter Property="CaretBrush" Value="#7C6BF8"/>
+            <Setter Property="SelectionBrush" Value="#3A336B"/>
+            <Setter Property="Padding" Value="14,11"/>
+            <Setter Property="FontSize" Value="13.5"/>
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#2D3254"/>
+        </Style>
+        <Style Selector="TextBox:focus-within /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#7C6BF8"/>
+        </Style>
+        <Style Selector="TextBox /template/ TextBlock#PART_Watermark">
+            <Setter Property="Foreground" Value="#3E4260"/>
+            <Setter Property="Opacity" Value="1"/>
+        </Style>
 
-        <TextBox Grid.Row="2"
-                 Watermark="Email"
-                 Text="{Binding Email}"
-                 Margin="0,0,0,10"/>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#7C6BF8"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontSize" Value="13.5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="0,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#6A58E8"/>
+        </Style>
+        <Style Selector="Button.primary:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#5849D2"/>
+        </Style>
+        <Style Selector="Button.primary:disabled /template/ ContentPresenter">
+            <Setter Property="Background" Value="#2D2A4A"/>
+        </Style>
 
-        <TextBox Grid.Row="3"
-                 Watermark="Password"
-                 PasswordChar="*"
-                 Text="{Binding Password}"
-                 Margin="0,0,0,10"/>
+    </Window.Styles>
 
-        <TextBlock Grid.Row="4"
-                   Text="{Binding ErrorMessage}"
-                   Foreground="#FF6B6B"
-                   FontSize="12"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,12"
-                   IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+    <Grid RowDefinitions="36,*">
 
-        <StackPanel Grid.Row="5"
-                    Orientation="Horizontal"
+        <!-- Drag region -->
+        <Border Grid.Row="0"
+                Background="Transparent"
+                PointerPressed="OnTitleBarPointerPressed"/>
+
+        <!-- Form card -->
+        <StackPanel Grid.Row="1"
+                    VerticalAlignment="Center"
+                    Margin="52,0,52,24"
+                    Spacing="0">
+
+            <!-- Logo mark -->
+            <Border Width="46" Height="46"
+                    CornerRadius="12"
+                    Background="#131625"
+                    BorderBrush="#1E2238"
+                    BorderThickness="1"
                     HorizontalAlignment="Center"
-                    Spacing="12"
-                    VerticalAlignment="Top">
-            <Button Content="Log In"
+                    Margin="0,0,0,16">
+                <TextBlock Text="Ut"
+                           Foreground="#7C6BF8"
+                           FontSize="17"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Border>
+
+            <!-- Title -->
+            <TextBlock Text="Usage Tracker"
+                       Foreground="#EEF0FA"
+                       FontSize="19"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,5"/>
+
+            <!-- Subtitle -->
+            <TextBlock Text="Sign in to your account"
+                       Foreground="#3E4260"
+                       FontSize="12.5"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,28"/>
+
+            <!-- Email -->
+            <TextBox Watermark="Email address"
+                     Text="{Binding Email}"
+                     Margin="0,0,0,10"/>
+
+            <!-- Password -->
+            <TextBox Watermark="Password"
+                     PasswordChar="●"
+                     Text="{Binding Password}"
+                     Margin="0,0,0,12"/>
+
+            <!-- Error message -->
+            <TextBlock Text="{Binding ErrorMessage}"
+                       Foreground="#F87171"
+                       FontSize="12"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,12"
+                       IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+            <!-- Sign in button -->
+            <Button Content="Sign in"
                     Command="{Binding LoginCommand}"
-                    Width="100"
-                    HorizontalContentAlignment="Center"/>
+                    IsEnabled="{Binding !IsBusy}"
+                    Classes="primary"
+                    HorizontalAlignment="Stretch"/>
+
         </StackPanel>
 
     </Grid>
